@@ -1,0 +1,33 @@
+
+.projectsContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.containerHeaderBtn {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.actionsContainer {
+    display: flex;
+    gap: 5px;
+    justify-content: space-evenly;
+}
+
+.tableCell {
+    border: 1px solid #a78282;
+    background-color: aquamarine;
+}
+
+.productPageHeader {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+}

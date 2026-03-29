@@ -1,0 +1,46 @@
+
+.projectDetailsRow {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.projectDetailsContainer {
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.projectDetailsLabel {
+    font-weight: bold;
+    min-width: 200px;
+    text-align: left;
+}
+
+.productDetailsPageHeader {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+}
+
+
+@media (max-width:350px) {
+    
+    .projectDetailsRow {
+        flex-direction: column;
+        display: flex;
+        align-content: flex-start;
+        flex-wrap: wrap;
+        line-height: 10px;
+        padding: 5px
+    }
+
+    .productDetailsBtn {
+        align-content: stretch;
+    }
+}
