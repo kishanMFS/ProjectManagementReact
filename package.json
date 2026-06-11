@@ -56,6 +56,6 @@
 		"*.{css,scss}": [
 		  "stylelint --fix",
 		  "prettier --write"
-		],
+		]
 	}
 }
