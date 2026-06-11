@@ -11,10 +11,6 @@ type UserAuthContextType = {
 type childrenType = {
   children: React.ReactNode;
 };
-type verifyUserResponseType = {
-  isValid : boolean,
-  message : string
-}
 
 const UserAuthContext = createContext<UserAuthContextType | null>(null);
 
@@ -39,17 +35,11 @@ export const UserAuthContextProvider = ({ children }: childrenType) => {
   };
 
   const validateUser = async () => {
-    try{
-      const verifyUserResponse : verifyUserResponseType = await verifyUserService({
-        callApi,
-        onProgress: () => {}
-      });
-      setIsLoggedIn(verifyUserResponse.isValid);
-
-    }
-    catch(err){
-      setIsLoggedIn(false);
-    }
+    const verifyUserResponse = await verifyUserService({
+      callApi,
+      onProgress: () => {}
+    });
+    setIsLoggedIn(verifyUserResponse.isValid);
   }
   
   useEffect(() => {

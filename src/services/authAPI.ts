@@ -6,29 +6,20 @@ const verifyAPI: string = import.meta.env.VITE_API + "/auth/verify";
 type loginUserServiceType = {
   access_token?: string;
   statusCode?: number;
-  message?: string;
+  message: string;
 };
-interface callApiType {
+interface callApiType<T> {
   apiURL: string;
   param?: object;
   onProgress: (value: number) => void;
-  resolve: (value: loginUserServiceType) => void;
+  resolve: (value: T) => void;
   reject: (value: unknown) => void;
 }
 interface loginUserType {
-  callApi: (args: callApiType) => void;
+  callApi: <T>(args: callApiType<T>) => void;
   credentials: { email: string; password: string };
   onProgress: (value: number) => void;
 }
-interface logoutUserType {
-  callApi: (args: callApiType) => void;
-  onProgress: (value: number) => void;
-}
-interface verifyUserType {
-  callApi: (args: callApiType) => void;
-  onProgress: (value: number) => void;
-}
-
 
 export function loginUserService({
   callApi,
@@ -46,8 +37,15 @@ export function loginUserService({
   });
 }
 
-type logoutUserServiceType = {
 
+type logoutUserServiceType = {
+  success: boolean,
+  message: string
+}
+
+interface logoutUserType {
+  callApi: <T>(args: callApiType<T>) => void;
+  onProgress: (value: number) => void;
 }
 
 export function logoutUserService({
@@ -67,6 +65,12 @@ export function logoutUserService({
 type verifyUserServiceType = {
   isValid : boolean,
   message : string
+}
+interface verifyUserType {
+  callApi: <T>(args: callApiType<T>) => void
+  onProgress: (value: number) => void;
+  resolve: (value: verifyUserServiceType) => void;
+  reject: (value: unknown) => void;
 }
 
 export function verifyUserService({

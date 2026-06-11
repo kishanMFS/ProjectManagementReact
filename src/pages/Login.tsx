@@ -78,12 +78,8 @@ function Login() {
         email: formField.email,
         password: formField.password,
       };
-      type responseType = {
-        access_token: string;
-        statusCode: number;
-        message: string;
-      };
-      const response: responseType = await loginUserService({
+    
+      const response = await loginUserService({
         callApi,
         credentials,
         onProgress,
