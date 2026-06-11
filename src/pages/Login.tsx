@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import InputText from "../components/InputText";
-import loginUserService from "../services/loginAPI";
+import {loginUserService} from "../services/authAPI";
 import Spinner from "../components/Spinner";
 
 import useAuth from "../hooks/useAuth";
@@ -89,15 +89,17 @@ function Login() {
         onProgress,
       });
       const jwttoken = response.access_token;
-      if (jwttoken.length) {
-        loginUser(jwttoken);
+      if (!jwttoken) {
+        setloginApiError(response.message);
+      }
+      else{
+        if (jwttoken.length) {
+          loginUser();
+        }
       }
 
       setIsLoading(false);
       setProgress(0);
-      if (response.statusCode === 401) {
-        setloginApiError(response.message);
-      }
     } catch (error: unknown) {
       console.error("Login failed:", error);
       setIsLoading(false);
