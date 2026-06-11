@@ -1,11 +1,11 @@
 type responseType = {
-  access_token: string;
-  statusCode: number;
-  message: string;
+  access_token?: string;
+  statusCode?: number;
+  message?: string;
 };
 interface useXHRType {
   apiURL: string;
-  param: object;
+  param?: object;
   onProgress: (value: number) => void;
   resolve: (value: responseType) => void;
   reject: (value: unknown) => void;
@@ -23,7 +23,7 @@ function useXHR() {
 
     xhr.open("POST", apiURL);
     xhr.setRequestHeader("Content-Type", "application/json");
-
+    xhr.withCredentials = true; 
     xhr.upload.onprogress = (event) => {
       if (event.lengthComputable) {
         const percent = (event.loaded / event.total) * 100;
