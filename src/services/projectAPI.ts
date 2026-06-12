@@ -15,13 +15,13 @@ interface callApiType<T> {
 type addProjectServiceType = {
   success: boolean;
   message: string;
+  project: object;
 };
 interface addProjectType<T> {
   callApi: (args: callApiType<T>) => void;
   newProjectVlaues: projectType;
   onProgress: (value: number) => number;
 }
-
 export function addProjectService({
   callApi,
   newProjectVlaues,
@@ -60,27 +60,28 @@ export function getProjectsService({
   });
 }
 
-type verifyUserServiceType = {
+type deleteProjectServiceType = {
   isValid: boolean;
   message: string;
 };
-interface verifyUserType {
+interface deleteProjectType {
   callApi: <T>(args: callApiType<T>) => void;
+  projectID: number;
   onProgress: (value: number) => void;
-  resolve: (value: verifyUserServiceType) => void;
+  resolve: (value: deleteProjectServiceType) => void;
   reject: (value: unknown) => void;
 }
 
-export function verifyUserService({
+export function deleteProjectService({
   callApi,
-  onProgress,
-}: verifyUserType): Promise<verifyUserServiceType> {
-  return new Promise<verifyUserServiceType>((resolve, reject) => {
+  projectID,
+}: deleteProjectType): Promise<deleteProjectServiceType> {
+  return new Promise<deleteProjectServiceType>((resolve, reject) => {
     callApi({
-      apiURL: verifyAPI,
-      onProgress,
+      apiURL: ProjectAPI + "/" + projectID,
       resolve,
       reject,
+      method: "DELETE",
     });
   });
 }
