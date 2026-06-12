@@ -1,5 +1,8 @@
 const apiURL: string = import.meta.env.VITE_API || "";
 const ProjectAPI: string = apiURL + "/projects";
+// const uploadFilesProjectAPI: string = apiURL + "/projects/{projectID}/files";
+// const getProjectFilesAPI: string = apiURL + "/projects/{projectID}/files";
+// const deleteFileProjectAPI: string = apiURL + "/projects/{projectID}/files/{fileID}";
 
 import type { projectType } from "../types/projects";
 
@@ -41,7 +44,7 @@ export function addProjectService({
 type getProjectsServiceType = {
   success: boolean;
   message: string;
-  products: [];
+  projects: [];
 };
 interface getProjectsType<T> {
   callApi: (args: callApiType<T>) => void;

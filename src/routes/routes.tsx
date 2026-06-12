@@ -10,6 +10,7 @@ import RenderError from "../pages/Error";
 import Layout from "../components/Layout";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { UserAuthContextProvider } from "../context/authenticationContext";
+import { ProjectContextProvider } from "../context/ProjectContext";
 import { ErrorContextProvider } from "../context/ErrorContext";
 import ErrorBoundaryWrapper from "../components/ErrorBoundaryWrapper";
 
@@ -80,7 +81,9 @@ const router = createBrowserRouter([
       <ErrorBoundaryWrapper>
         <ErrorContextProvider>
           <UserAuthContextProvider>
-            <Outlet />
+            <ProjectContextProvider>
+              <Outlet />
+            </ProjectContextProvider>
           </UserAuthContextProvider>
         </ErrorContextProvider>
       </ErrorBoundaryWrapper>
