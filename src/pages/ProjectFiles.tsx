@@ -114,7 +114,7 @@ function ProjectFiles() {
               onDrop={handleDrop}
               onDragOver={handleDragOver}
               tabIndex={0}
-              aria-label={`press enter to add project files for ${foundProject.projectName} `}
+              aria-label={`press enter to add project files for ${foundProject.projectname} `}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   document.getElementById("ProjectFile")?.click();
@@ -153,7 +153,7 @@ function ProjectFiles() {
                 type="button"
                 disabled={btnDisabled}
                 onClick={handleFileUpload}
-                aria-label={`press enter to upload project files for ${foundProject.projectName} `}
+                aria-label={`press enter to upload project files for ${foundProject.projectname} `}
               >
                 Upload
               </button>
@@ -191,7 +191,7 @@ function ProjectFiles() {
                             handleFileDelete(index);
                           }
                         }}
-                        aria-label={`remove project file ${file.name} for ${foundProject.projectName} `}
+                        aria-label={`remove project file ${file.name} for ${foundProject.projectname} `}
                       >
                         x
                       </span>

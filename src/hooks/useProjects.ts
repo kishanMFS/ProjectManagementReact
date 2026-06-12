@@ -4,21 +4,20 @@ import type { projectType } from "../types/projects";
 import useXHR from "../hooks/useXHR";
 
 function useProjects() {
-  const [projects, dispatchProjectReducer] = useReducer(
-    projectReducer,
-    []
-  );
+  const [projects, dispatchProjectReducer] = useReducer(projectReducer, []);
   const { callApi } = useXHR();
 
   useEffect(() => {
+    if (projects.length > 0) return;
+
     const loadProjects = async () => {
       try {
-        const data = await getProjects(callApi);
-
-        dispatchProjectReducer({
-          type: "SET_PROJECTS",
-          payload: data,
-        });
+        const getProjectsResponse = await getProjects(callApi);
+        if (getProjectsResponse.success)
+          dispatchProjectReducer({
+            type: "SET_PROJECTS",
+            payload: getProjectsResponse.projects,
+          });
       } catch (error) {
         console.error("Failed to load projects", error);
       }
@@ -42,7 +41,7 @@ function useProjects() {
   };
 
   const getProjectByProjectId = (projectId: string) => {
-    return projects.find((p) => p.id === projectId);
+    return projects.find((p) => p.project_id == Number(projectId));
   };
 
   return {

@@ -30,7 +30,7 @@ function ProjectDeatails() {
                 Project Name
               </span>
               <span>
-                {project.projectName} - ({project.id})
+                {project.projectname} - ({project.project_id})
               </span>
             </div>
             <div className={ProjectDetailsModuleCSS.projectDetailsRow}>
@@ -43,19 +43,19 @@ function ProjectDeatails() {
               <span className={ProjectDetailsModuleCSS.projectDetailsLabel}>
                 Files
               </span>
-              <span>{project.projectFiles.length || 0} files</span>
+              <span>{project.projectfiles || 0} files</span>
             </div>
             <div className={ProjectDetailsModuleCSS.projectDetailsRow}>
               <span className={ProjectDetailsModuleCSS.projectDetailsLabel}>
                 Jobs
               </span>
-              <span>{project.projectJobs.length || 0} jobs</span>
+              <span>{project.projectjobs || 0} jobs</span>
             </div>
             <div className={ProjectDetailsModuleCSS.projectDetailsRow}>
               <span className={ProjectDetailsModuleCSS.projectDetailsLabel}>
                 Created Date
               </span>
-              <span>{project.createdDate}</span>
+              <span>{project.createddate}</span>
             </div>
             <div
               className={` ${ProjectDetailsModuleCSS.projectDetailsRow} ${ProjectDetailsModuleCSS.productDetailsBtn}`}
@@ -65,7 +65,7 @@ function ProjectDeatails() {
                 className={GlobalModuleCSS.btn}
                 value="Upload Files"
                 onClick={handleSubmitFiles}
-                aria-label={`upload project files for ${project.projectName} `}
+                aria-label={`upload project files for ${project.projectname} `}
               />
             </div>
           </div>

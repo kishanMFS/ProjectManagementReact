@@ -8,9 +8,9 @@ import { UserAuthContextProvider } from "../../src/context/authenticationContext
 jest.mock("../../src/hooks/useProjects", () => {
   return () => ({
     getProjectByProjectId: jest.fn(() => ({
-      projectId: "123",
-      projectName: "Test Project",
-      projectFiles: [],
+      project_id: "123",
+      projectname: "Test Project",
+      projectfiles: 0,
     })),
     updateProject: jest.fn(),
   });

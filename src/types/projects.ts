@@ -15,10 +15,10 @@ export interface jobType {
 }
 
 export type projectType = {
-  id: string;
-  projectName: string;
+  project_id?: string | number;
+  projectname: string;
   description: string;
-  createdDate: string;
-  projectFiles: fileType[];
-  projectJobs: jobType[];
+  createddate: string;
+  projectfiles: number;
+  projectjobs: number;
 };
