@@ -21,7 +21,7 @@ function Projects() {
     projectJobs: [],
     createdDate: new Date().toISOString().split("T")[0],
   });
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { projects, addProject, deleteProject, getProjectByProjectId } =
     useProjects();
   const { showErrorMessage } = useErrorContext();

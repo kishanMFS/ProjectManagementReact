@@ -6,20 +6,24 @@ const deleteFileProjectAPI: string = apiURL + "/projects/{projectID}/files/{file
 
 import type { projectType } from "../types/projects";
 
+interface callApiType <T> {
+  apiURL: string;
+  param?: projectType;
+  onProgress?: (value: number) => number;
+  resolve: (value: T) => void;
+  reject: (value: unknown) => void;
+  method?: string;
+}
+
+
 type addProjectServiceType = {
   success: boolean,
   message: string
 };
-interface callApiType<T> {
-  apiURL: string;
+interface addProjectType <T> {
+  callApi: (args: callApiType<T>) => void;
   newProjectVlaues: projectType;
-  resolve: (value: T) => void;
-  reject: (value: unknown) => void;
-}
-interface addProjectType {
-  callApi: <T>(args: callApiType<T>) => void;
-  newProjectVlaues: projectType;
-  onProgress: (value: number) => void;
+  onProgress: (value: number) => number;
 }
 
 export function addProjectService({
@@ -27,7 +31,7 @@ export function addProjectService({
   newProjectVlaues,
   onProgress
   
-}: addProjectType): Promise<addProjectServiceType> {
+}: addProjectType<addProjectServiceType>): Promise<addProjectServiceType> {
   return new Promise<addProjectServiceType>((resolve, reject) => {
     callApi({
       apiURL: ProjectAPI,
@@ -40,29 +44,32 @@ export function addProjectService({
 }
 
 
-type logoutUserServiceType = {
+type getProjectsServiceType = {
   success: boolean,
-  message: string
+  message: string,
+  products: []
+}
+interface getProjectsType <T> {
+  callApi: (args: callApiType<T>) => void;
+  
 }
 
-interface logoutUserType {
-  callApi: <T>(args: callApiType<T>) => void;
-  onProgress: (value: number) => void;
-}
-
-export function logoutUserService({
+export function getProjectsService({
   callApi,
-  onProgress
-}: logoutUserType): Promise<logoutUserServiceType> {
-  return new Promise<logoutUserServiceType>((resolve, reject) => {
+  
+}: getProjectsType<getProjectsServiceType>): Promise<getProjectsServiceType> {
+  return new Promise<getProjectsServiceType>((resolve, reject) => {
     callApi({
-      apiURL: logoutAPI,
-      onProgress,
+      apiURL: ProjectAPI,
       resolve,
       reject,
+      method:'GET'
     });
   });
 }
+
+
+
 
 type verifyUserServiceType = {
   isValid : boolean,

@@ -1,17 +1,31 @@
 import { useReducer, useEffect } from "react";
 import { projectReducer, getProjects } from "../reducers/projectReducers";
 import type { projectType } from "../types/projects";
+import useXHR from "../hooks/useXHR";
 
 function useProjects() {
   const [projects, dispatchProjectReducer] = useReducer(
     projectReducer,
-    [],
-    getProjects,
+    []
   );
+  const { callApi } = useXHR();
 
-  // useEffect(() => {
-  //   localStorage.setItem("projects", JSON.stringify(projects));
-  // }, [projects]);
+  useEffect(() => {
+    const loadProjects = async () => {
+      try {
+        const data = await getProjects(callApi);
+
+        dispatchProjectReducer({
+          type: "SET_PROJECTS",
+          payload: data,
+        });
+      } catch (error) {
+        console.error("Failed to load projects", error);
+      }
+    };
+
+    loadProjects();
+  }, []);
 
   // actions
 
