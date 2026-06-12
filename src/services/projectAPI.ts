@@ -24,13 +24,13 @@ interface addProjectType<T> {
 }
 export function addProjectService({
   callApi,
-  newProjectVlaues,
+  newProjectValues,
   onProgress,
 }: addProjectType<addProjectServiceType>): Promise<addProjectServiceType> {
   return new Promise<addProjectServiceType>((resolve, reject) => {
     callApi({
       apiURL: ProjectAPI,
-      param: newProjectVlaues,
+      param: newProjectValues,
       onProgress,
       resolve,
       reject,
