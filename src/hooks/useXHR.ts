@@ -6,9 +6,10 @@ type responseType = {
 interface useXHRType {
   apiURL: string;
   param?: object;
-  onProgress: (value: number) => void;
+  onProgress?: (value: number) => void;
   resolve: (value: responseType) => void;
   reject: (value: unknown) => void;
+  method: string;
 }
 
 function useXHR() {
@@ -18,10 +19,11 @@ function useXHR() {
     onProgress,
     resolve,
     reject,
+    method='POST'
   }: useXHRType) => {
     const xhr = new XMLHttpRequest();
 
-    xhr.open("POST", apiURL);
+    xhr.open(method, apiURL);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.withCredentials = true; 
     xhr.upload.onprogress = (event) => {

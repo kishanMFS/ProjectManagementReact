@@ -9,9 +9,9 @@ function useProjects() {
     getProjects,
   );
 
-  useEffect(() => {
-    localStorage.setItem("projects", JSON.stringify(projects));
-  }, [projects]);
+  // useEffect(() => {
+  //   localStorage.setItem("projects", JSON.stringify(projects));
+  // }, [projects]);
 
   // actions
 

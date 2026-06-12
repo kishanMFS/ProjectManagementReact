@@ -6,10 +6,11 @@ import InputText from "../components/InputText";
 import GlobalModuleCSS from "../styles/Global.module.css";
 import ProjectsModuleCSS from "../styles/Projects.module.css";
 import useProjects from "../hooks/useProjects";
-
 import useErrorContext from "../hooks/useError";
+import useXHR from "../hooks/useXHR";
 
 import type { projectType } from "../types/projects";
+import {addProjectService} from "../services/projectAPI";
 
 function Projects() {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ function Projects() {
   const { projects, addProject, deleteProject, getProjectByProjectId } =
     useProjects();
   const { showErrorMessage } = useErrorContext();
+  const { callApi } = useXHR();
 
   function handleOpenProject(projectId: string) {
     navigate(`/projects/${projectId}`);
@@ -53,14 +55,23 @@ function Projects() {
     showErrorMessage(`${deletedProject.projectName} Project Deleted`);
   }
 
-  const handleCreateProject = () => {
+  const handleCreateProject = async () => {
     const newProjectVlaues: projectType = {
       ...newProject,
       id: Date.now().toString(), // since id is not defined in projectDetails, we can generate a unique id using timestamp
     };
 
-    addProject(newProjectVlaues);
-    showErrorMessage(`${newProject.projectName} Project added`);
+    const addProjectResponse = await addProjectService({
+      callApi,
+      newProjectVlaues      
+    });
+    if(addProjectResponse.success){
+      addProject(newProjectVlaues);
+      showErrorMessage(`${newProject.projectName} Project added`);
+    }
+    else{
+      showErrorMessage(addProjectResponse.message);
+    }
 
     setModalOpen(false);
     setNewProject({
