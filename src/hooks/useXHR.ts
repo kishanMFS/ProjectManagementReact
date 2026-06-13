@@ -1,11 +1,11 @@
-
 interface useXHRType<T> {
   apiURL: string;
-  param?: object;
+  param?: object | FormData;
   onProgress?: (value: number) => number;
   resolve: (value: T) => void;
   reject: (value: unknown) => void;
-  method: string;
+  method?: string;
+  contentType?: string;
 }
 
 function useXHR() {
@@ -15,15 +15,20 @@ function useXHR() {
     onProgress,
     resolve,
     reject,
-    method='POST'
+    method = "POST",
+    contentType = "application/json",
   }: useXHRType<object>) => {
     const xhr = new XMLHttpRequest();
 
     xhr.open(method, apiURL);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.withCredentials = true; 
+    xhr.withCredentials = true;
+
+    if (!(param instanceof FormData)) {
+      xhr.setRequestHeader("Content-Type", contentType);
+    }
+
     xhr.upload.onprogress = (event) => {
-      if ( typeof onProgress !== 'undefined' && event.lengthComputable) {
+      if (onProgress && event.lengthComputable) {
         const percent = (event.loaded / event.total) * 100;
         onProgress(Math.round(percent));
       }
@@ -34,7 +39,11 @@ function useXHR() {
     };
 
     xhr.onerror = reject;
-    xhr.send(JSON.stringify(param));
+    if (param instanceof FormData) {
+      xhr.send(param);
+    } else {
+      xhr.send(JSON.stringify(param));
+    }
   };
 
   return {

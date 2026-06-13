@@ -100,7 +100,7 @@ function Projects() {
       description: "",
       projectfiles: 0,
       projectjobs: 0,
-      createddate: new Date().toISOString().split("T")[0],
+      createddate: "",
     });
   };
 

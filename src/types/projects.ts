@@ -1,9 +1,10 @@
 export interface fileType {
+  projectfileid: number;
   name: string;
   size: number;
   type: string;
   fileData: unknown;
-  uploadedDate: string;
+  uploadeddate: string;
 }
 
 export interface jobType {
@@ -15,7 +16,7 @@ export interface jobType {
 }
 
 export type projectType = {
-  project_id?: string | number;
+  project_id?: string;
   projectname: string;
   description: string;
   createddate: string;
