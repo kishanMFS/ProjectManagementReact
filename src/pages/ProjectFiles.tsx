@@ -15,7 +15,7 @@ import GlobalModuleCSS from "../styles/Global.module.css";
 
 function ProjectFiles() {
   const [files, setFiles] = useState<File[]>([]);
-  const FILE_MAX_SIZE = 1024 * 10; // 10kb
+  const FILE_MAX_SIZE = 1024 * 1024 * 10; // 1 MB
   const { showErrorMessage } = useErrorContext();
   const { callApi } = useXHR();
   const { getProjectByProjectId } = useProjects();
@@ -190,7 +190,7 @@ function ProjectFiles() {
                 <div className={ProjectFilesModuleCSS.filesField} key={index}>
                   <div>{file.name}</div>
                   <div className={ProjectFilesModuleCSS.fileSize}>
-                    size : {file.size / 1000} Kb
+                    size : {(file.size / 1024).toFixed(2)} Kb
                   </div>
                   <div className={ProjectFilesModuleCSS.fileError}>
                     {file.size > FILE_MAX_SIZE ? "File size too big" : ""}

@@ -3,6 +3,7 @@ import React, { createContext, useEffect, useReducer, useRef } from "react";
 import useXHR from "../hooks/useXHR";
 import { projectReducer, getProjects } from "../reducers/projectReducers";
 import type { projectType } from "../types/projects";
+import useAuth from "../hooks/useAuth";
 
 type actionType =
   | { type: "SET_PROJECTS"; payload: projectType[] }
@@ -25,9 +26,16 @@ export function ProjectContextProvider({
   const [projects, dispatchProjectReducer] = useReducer(projectReducer, []);
   const { callApi } = useXHR();
   const hasLoaded = useRef(false);
+  const { isLoggedIn } = useAuth();
 
   useEffect(() => {
+    if (!isLoggedIn) {
+      hasLoaded.current = false;
+      return;
+    }
+
     if (hasLoaded.current) return;
+
     hasLoaded.current = true;
 
     const loadProjects = async () => {
@@ -46,7 +54,7 @@ export function ProjectContextProvider({
     };
 
     loadProjects();
-  }, [callApi]);
+  }, [isLoggedIn, callApi]);
 
   return (
     <ProjectContext.Provider value={{ projects, dispatchProjectReducer }}>

@@ -99,19 +99,19 @@ type uploadFilesServiceType = {
 interface uploadFilesType {
   callApi: <T>(args: callApiType<T>) => void;
   formdata: FormData;
-  projectid: string;
+  project_id: string;
   // onProgress: (value: number) => void;
   // resolve: (value: uploadFilesServiceType) => void;
   // reject: (value: unknown) => void;
 }
 export function uploadFilesService({
   callApi,
-  projectid,
+  project_id,
   formdata,
 }: uploadFilesType): Promise<uploadFilesServiceType> {
   return new Promise<uploadFilesServiceType>((resolve, reject) => {
     callApi({
-      apiURL: uploadFilesProjectAPI.replace("{projectID}", projectid),
+      apiURL: uploadFilesProjectAPI.replace("{projectID}", project_id),
       param: formdata,
       resolve,
       reject,
