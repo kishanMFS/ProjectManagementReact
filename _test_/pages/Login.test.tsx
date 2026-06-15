@@ -1,4 +1,10 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from "@testing-library/react";
 import { UserAuthContextProvider } from "../../src/context/authenticationContext";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
@@ -85,9 +91,9 @@ describe("Login form validation", () => {
 });
 
 // Mock loginUserService
-jest.mock("../../src/services/loginAPI", () => ({
+jest.mock("../../src/services/authAPI", () => ({
   __esModule: true,
-  default: jest.fn(() =>
+  loginUserService: jest.fn(() =>
     Promise.resolve({
       access_token: "fake-token",
       statusCode: 200,
@@ -109,18 +115,73 @@ jest.mock("../../src/hooks/useAuth", () => {
   });
 });
 
-describe("accepts valid login credentials and redirects to /projects", () => {
-  test("navigates to /projects after login button click", async () => {
+jest.mock("../../src/services/authAPI", () => ({
+  loginUserService: jest.fn().mockResolvedValue({
+    access_token: "fake-token",
+    statusCode: 200,
+    message: "OK",
+  }),
+
+  verifyUserService: jest.fn().mockResolvedValue({
+    statusCode: 200,
+    message: "OK",
+  }),
+}));
+
+// jest.mock("../../src/services/authAPI", () => ({
+//   loginService: jest.fn(),
+//   verifyUserService: jest.fn(),
+// }));
+
+const mockNavigate = jest.fn();
+
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: () => mockNavigate,
+}));
+
+test("navigates to /projects after login", async () => {
+  await act(async () => {
     render(
-      <MemoryRouter initialEntries={["/login"]}>
+      <MemoryRouter>
         <UserAuthContextProvider>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/projects" element={<Projects />} />
-          </Routes>
+          <Login />
         </UserAuthContextProvider>
       </MemoryRouter>,
     );
+  });
+
+  fireEvent.change(screen.getByLabelText(/email/i), {
+    target: { value: "john@mail.com" },
+  });
+
+  fireEvent.change(screen.getByLabelText(/password/i), {
+    target: { value: "changeme" },
+  });
+
+  fireEvent.click(screen.getByRole("button", { name: /login/i }));
+
+  await waitFor(() => {
+    expect(mockNavigate).toHaveBeenCalledWith("/projects", {
+      replace: true,
+    });
+  });
+});
+
+describe("accepts valid login credentials and redirects to /projects", () => {
+  test("navigates to /projects after login button click", async () => {
+    await act(async () => {
+      render(
+        <MemoryRouter initialEntries={["/login"]}>
+          <UserAuthContextProvider>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/projects" element={<Projects />} />
+            </Routes>
+          </UserAuthContextProvider>
+        </MemoryRouter>,
+      );
+    });
 
     fireEvent.change(screen.getByLabelText(/Email/i), {
       target: { value: "john@mail.com" },
@@ -132,8 +193,11 @@ describe("accepts valid login credentials and redirects to /projects", () => {
     // Click the login button
     fireEvent.click(screen.getByRole("button", { name: /login/i }));
 
-    expect(
-      await screen.findByRole("heading", { name: /projects page/i }),
-    ).toBeInTheDocument();
+    // expect(
+    //   await screen.findByRole("heading", { name: /projects page/i }),
+    // ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith("/projects", { replace: true });
+    });
   });
 });

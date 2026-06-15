@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { logoutUserService, verifyUserService} from "../services/authAPI";
+import { logoutUserService, verifyUserService } from "../services/authAPI";
 import useXHR from "../hooks/useXHR";
 
 type UserAuthContextType = {
@@ -27,24 +27,49 @@ export const UserAuthContextProvider = ({ children }: childrenType) => {
   const logoutUser = async () => {
     await logoutUserService({
       callApi,
-      onProgress: () => {}
+      onProgress: () => {},
     });
 
     setIsLoggedIn(false);
     navigate("/login");
   };
 
-  const validateUser = async () => {
-    const verifyUserResponse = await verifyUserService({
-      callApi,
-      onProgress: () => {}
-    });
-    setIsLoggedIn(verifyUserResponse.isValid);
-  }
-  
+  // const validateUser = async () => {
+  //   const verifyUserResponse = await verifyUserService({
+  //     callApi,
+  //     onProgress: () => {}
+  //   });
+  //   setIsLoggedIn(verifyUserResponse.isValid);
+  // }
+
   useEffect(() => {
+    // void validateUser();
+
+    let mounted = true;
+
+    const validateUser = async () => {
+      try {
+        const verifyUserResponse = await verifyUserService({
+          callApi,
+          onProgress: () => {},
+        });
+
+        if (mounted) {
+          setIsLoggedIn(verifyUserResponse.isValid);
+        }
+      } catch {
+        if (mounted) {
+          setIsLoggedIn(false);
+        }
+      }
+    };
+
     void validateUser();
-  }, []);
+
+    return () => {
+      mounted = false;
+    };
+  }, [callApi]);
 
   return (
     <UserAuthContext.Provider value={{ isLoggedIn, loginUser, logoutUser }}>
