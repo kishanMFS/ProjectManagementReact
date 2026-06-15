@@ -54,7 +54,6 @@
 			"prettier --write"
 		],
 		"*.{css,scss}": [
-			
 			"prettier --write"
 		]
 	}
