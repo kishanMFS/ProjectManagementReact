@@ -258,8 +258,6 @@ export function createProjectJobService({
 }
 
 export type downloadJobZipServiceType = {
-  success: boolean;
-  message: string;
   blob: Blob | MediaSource;
 };
 export interface downloadJobZipType {

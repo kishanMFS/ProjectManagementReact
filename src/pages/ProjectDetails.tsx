@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import useProjects from "../hooks/useProjects";
 
 import ProjectDetailsModuleCSS from "../styles/ProjectDetails.module.css";
@@ -30,18 +30,7 @@ function ProjectDetails() {
     navigate(`/projects/${projectId}/files`); // Navigate to the upload page
   }
 
-  async function loadFiles() {
-    const response = await getProjectFilesService({
-      callApi,
-      project_id: Number(projectId),
-    });
-
-    if (response.success) {
-      setFiles(response.files);
-    }
-  }
-
-  async function loadJobs() {
+  const loadJobs = useCallback(async () => {
     const response = await getProjectJobsService({
       callApi,
       projectId,
@@ -50,7 +39,7 @@ function ProjectDetails() {
     if (response.success) {
       setJobs(response.jobs);
     }
-  }
+  }, [callApi, projectId]);
 
   function handleFileSelection(fileId: string) {
     setSelectedFiles((current) =>
@@ -124,7 +113,24 @@ function ProjectDetails() {
     // loadJobs();
 
     async function fetchData() {
-      await Promise.all([loadFiles(), loadJobs()]);
+      const [filesResponse, jobsResponse] = await Promise.all([
+        getProjectFilesService({
+          callApi,
+          project_id: Number(projectId),
+        }),
+        getProjectJobsService({
+          callApi,
+          projectId,
+        }),
+      ]);
+
+      if (filesResponse.success) {
+        setFiles(filesResponse.files);
+      }
+
+      if (jobsResponse.success) {
+        setJobs(jobsResponse.jobs);
+      }
     }
 
     fetchData();
@@ -239,7 +245,7 @@ function ProjectDetails() {
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
-                        handleDownloadJob(job.zipname);
+                        handleDownloadJob(job.zipname!);
                       }}
                     >
                       {job.zipname}
@@ -251,8 +257,8 @@ function ProjectDetails() {
 
                 <div className={ProjectDetailsModuleCSS.jobRow}>
                   {job.status}{" "}
-                  {job.progress < 100 &&
-                    job.progress > 0 &&
+                  {job.progress! < 100 &&
+                    job.progress! > 0 &&
                     ` (${job.progress}%)`}
                 </div>
               </div>
