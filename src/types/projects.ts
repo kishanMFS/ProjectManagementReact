@@ -1,9 +1,10 @@
 export interface fileType {
+  projectfileid: number;
   name: string;
   size: number;
   type: string;
   fileData: unknown;
-  uploadedDate: string;
+  uploadeddate: string;
 }
 
 export interface jobType {
@@ -15,10 +16,19 @@ export interface jobType {
 }
 
 export type projectType = {
-  id: string;
-  projectName: string;
+  project_id?: string;
+  projectname: string;
   description: string;
-  createdDate: string;
-  projectFiles: fileType[];
-  projectJobs: jobType[];
+  createddate: string;
+  projectfiles: number;
+  projectjobs: number;
+  fileId?: [];
+};
+
+export type projectJobType = {
+  jobid: string;
+  jobname?: string;
+  status: "Pending" | "Processing" | "Completed" | "Failed";
+  zipfile?: string;
+  zipname?: string;
 };

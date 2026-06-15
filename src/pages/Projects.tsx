@@ -6,24 +6,29 @@ import InputText from "../components/InputText";
 import GlobalModuleCSS from "../styles/Global.module.css";
 import ProjectsModuleCSS from "../styles/Projects.module.css";
 import useProjects from "../hooks/useProjects";
-
 import useErrorContext from "../hooks/useError";
+import useXHR from "../hooks/useXHR";
 
 import type { projectType } from "../types/projects";
+import {
+  addProjectService,
+  deleteProjectService,
+} from "../services/projectAPI";
 
 function Projects() {
   const navigate = useNavigate();
   const [newProject, setNewProject] = useState({
-    projectName: "New Project Name",
+    projectname: "New Project Name",
     description: "Project description",
-    projectFiles: [],
-    projectJobs: [],
-    createdDate: new Date().toISOString().split("T")[0],
+    projectfiles: 0,
+    projectjobs: 0,
+    createddate: new Date().toISOString().split("T")[0],
   });
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { projects, addProject, deleteProject, getProjectByProjectId } =
     useProjects();
   const { showErrorMessage } = useErrorContext();
+  const { callApi } = useXHR();
 
   function handleOpenProject(projectId: string) {
     navigate(`/projects/${projectId}`);
@@ -43,32 +48,59 @@ function Projects() {
   useEffect(() => {
     if (modalOpen)
       document
-        .querySelector<HTMLInputElement>("input[name='projectName']")
+        .querySelector<HTMLInputElement>("input[name='projectname']")
         ?.focus();
   }, [modalOpen]);
 
-  function handleDeleteProject(projectId: string) {
+  const handleDeleteProject = async (projectId: string) => {
     const deletedProject: projectType = getProjectByProjectId(projectId)!;
-    deleteProject(projectId);
-    showErrorMessage(`${deletedProject.projectName} Project Deleted`);
-  }
+    if (!deletedProject) {
+      showErrorMessage("Project not found");
+      return;
+    }
 
-  const handleCreateProject = () => {
-    const newProjectVlaues: projectType = {
+    // call delete api
+    const deleteResponse = await deleteProjectService({
+      callApi,
+      projectID: projectId,
+    });
+
+    if (deleteResponse.success) {
+      showErrorMessage(`${deletedProject.projectname} Project Deleted`);
+      deleteProject(projectId);
+    } else {
+      showErrorMessage(deleteResponse.message);
+    }
+  };
+
+  const handleCreateProject = async () => {
+    const newProjectValues: projectType = {
       ...newProject,
-      id: Date.now().toString(), // since id is not defined in projectDetails, we can generate a unique id using timestamp
     };
 
-    addProject(newProjectVlaues);
-    showErrorMessage(`${newProject.projectName} Project added`);
+    const addProjectResponse = await addProjectService({
+      callApi,
+      newProjectValues,
+    });
+    if (addProjectResponse.success) {
+      const project = {
+        ...newProjectValues,
+        project_id: addProjectResponse.project.project_id,
+      };
+
+      addProject(project);
+      showErrorMessage(`${newProjectValues.projectname} Project added`);
+    } else {
+      showErrorMessage(addProjectResponse.message);
+    }
 
     setModalOpen(false);
     setNewProject({
-      projectName: "",
+      projectname: "",
       description: "",
-      projectFiles: [],
-      projectJobs: [],
-      createdDate: new Date().toISOString().split("T")[0],
+      projectfiles: 0,
+      projectjobs: 0,
+      createddate: "",
     });
   };
 
@@ -105,10 +137,10 @@ function Projects() {
       >
         <div>
           <div className={GlobalModuleCSS.inputGroup}>
-            <label htmlFor="projectName">Project Name:</label>
+            <label htmlFor="projectname">Project Name:</label>
             <InputText
-              inputName="projectName"
-              inputValue={newProject.projectName}
+              inputName="projectname"
+              inputValue={newProject.projectname}
               onInputChange={handleInputChange}
               errorMessage=""
             />
@@ -157,35 +189,35 @@ function Projects() {
               {projects.map((project: projectType, index: number) => (
                 <tr className={GlobalModuleCSS.textLeft} key={index}>
                   <td className={ProjectsModuleCSS.tableCell}>
-                    {project.projectName}
+                    {project.projectname}
                   </td>
                   <td className={ProjectsModuleCSS.tableCell}>
                     {project.description}
                   </td>
                   <td className={ProjectsModuleCSS.tableCell}>
-                    {project.projectFiles.length}
+                    {project.projectfiles}
                   </td>
                   <td className={ProjectsModuleCSS.tableCell}>
-                    {project.projectJobs.length}
+                    {project.projectjobs}
                   </td>
                   <td className={ProjectsModuleCSS.tableCell}>
-                    {project.createdDate}
+                    {project.createddate}
                   </td>
                   <td>
                     <div className={ProjectsModuleCSS.actionsContainer}>
                       <button
                         type="button"
-                        onClick={() => handleOpenProject(project.id)}
+                        onClick={() => handleOpenProject(project.project_id)}
                         className={GlobalModuleCSS.btn}
-                        aria-label={`open project ${project.projectName} `}
+                        aria-label={`open project ${project.projectname} `}
                       >
                         Open
                       </button>
                       <button
                         type="button"
-                        onClick={() => handleDeleteProject(project.id)}
+                        onClick={() => handleDeleteProject(project.project_id)}
                         className={GlobalModuleCSS.btn}
-                        aria-label={`delete project ${project.projectName} `}
+                        aria-label={`delete project ${project.projectname} `}
                       >
                         Delete
                       </button>
