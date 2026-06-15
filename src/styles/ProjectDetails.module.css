@@ -1,46 +1,69 @@
-
 .projectDetailsRow {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    margin-bottom: 15px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
 .projectDetailsContainer {
-    display: flex;
-    flex-direction: column;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+  display: flex;
+  flex-direction: column;
+  /* max-width: 800px; */
+  /* margin: 0 auto; */
+  padding: 20px;
 }
 
 .projectDetailsLabel {
-    font-weight: bold;
-    min-width: 200px;
-    text-align: left;
+  font-weight: bold;
+  min-width: 200px;
+  text-align: left;
 }
 
 .productDetailsPageHeader {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: center;
 }
 
+.projectJobsArea {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
 
-@media (max-width:350px) {
-    
-    .projectDetailsRow {
-        flex-direction: column;
-        display: flex;
-        align-content: flex-start;
-        flex-wrap: wrap;
-        line-height: 10px;
-        padding: 5px
-    }
+.jobsContainer {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  max-width: 420px;
+}
+.jobsHeader,
+.filesHeader {
+  display: flex;
+  justify-content: space-evenly;
+}
 
-    .productDetailsBtn {
-        align-content: stretch;
-    }
+.jobDetails,
+.filesList {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+@media (max-width: 350px) {
+  .projectDetailsRow {
+    flex-direction: column;
+    display: flex;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    line-height: 10px;
+    padding: 5px;
+  }
+
+  .productDetailsBtn {
+    align-content: stretch;
+  }
 }

@@ -54,8 +54,8 @@
 			"prettier --write"
 		],
 		"*.{css,scss}": [
-		  "stylelint --fix",
-		  "prettier --write"
+			
+			"prettier --write"
 		]
 	}
 }

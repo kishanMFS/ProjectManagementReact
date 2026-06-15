@@ -4,6 +4,10 @@ const uploadFilesProjectAPI: string = apiURL + "/projects/{projectID}/files";
 const getProjectFilesAPI: string = apiURL + "/projects/{projectID}/files";
 const deleteFileProjectAPI: string =
   apiURL + "/projects/{projectID}/files/{fileID}";
+const getJobsAPI: string = apiURL + "/projects/{projectID}/jobs";
+// const getJobAPI: string = apiURL + '/{projectID}/jobs/{jobID}';
+const createZipAPI: string = apiURL + "/projects/{projectID}/jobs/zip";
+const downloadZipAPI: string = apiURL + "/{projectID}/files/{zipName}/download";
 
 import type { projectType, fileType } from "../types/projects";
 
@@ -121,6 +125,7 @@ export function uploadFilesService({
 }
 
 export type projectFileType = {
+  success: string;
   fileID: number;
   name: string;
   size: number;
@@ -166,6 +171,106 @@ export function deleteProjectFileService({
   return new Promise((resolve, reject) => {
     callApi({
       apiURL: deleteFileProjectAPI
+        .replace("{projectID}", String(projectID))
+        .replace("{fileID}", String(fileID)),
+      method: "DELETE",
+      resolve,
+      reject,
+    });
+  });
+}
+
+// get all jobs
+export type getProjectJobsServiceType = {
+  success: boolean;
+  message: string;
+};
+export interface getProjectJobsType {
+  callApi: <T>(args: callApiType<T>) => void;
+  projectId: number;
+}
+export function getProjectJobsService({
+  callApi,
+  projectId,
+}: getProjectJobsType): Promise<getProjectJobsServiceType> {
+  return new Promise((resolve, reject) => {
+    callApi({
+      apiURL: getJobsAPI.replace("{projectID}", String(projectId)),
+      resolve,
+      reject,
+      method: "GET",
+    });
+  });
+}
+
+// export type getProjectJobServiceType = {
+//   success: boolean;
+//   message: string;
+// };
+// export interface getProjectJobType {
+//   callApi: <T>(args: callApiType<T>) => void;
+//   projectID: number;
+//   jobID: number;
+// }
+
+// export function getProjectJobService({
+//   callApi,
+//   projectID,
+//   jobID
+// }: getProjectJobType): Promise<getProjectJobServiceType> {
+//   return new Promise((resolve, reject) => {
+//     callApi({
+//       apiURL: getJobAPI
+//         .replace("{projectID}", String(projectID))
+//         .replace("{jobID}", String(jobID)),
+//       resolve,
+//       reject,
+//       method: "GET"
+//     });
+//   });
+// }
+
+export type createProjectJobServiceType = {
+  success: boolean;
+  message: string;
+};
+export interface createProjectJobType {
+  callApi: <T>(args: callApiType<T>) => void;
+  projectId: number;
+  selectedFiles: [];
+}
+export function createProjectJobService({
+  callApi,
+  projectId,
+  selectedFiles,
+}: createProjectJobType): Promise<createProjectJobServiceType> {
+  return new Promise((resolve, reject) => {
+    callApi({
+      apiURL: createZipAPI.replace("{projectID}", String(projectId)),
+      param: { fileId: selectedFiles },
+      resolve,
+      reject,
+    });
+  });
+}
+
+export type downloadJobZipServiceType = {
+  success: boolean;
+  message: string;
+};
+export interface downloadJobZipType {
+  callApi: <T>(args: callApiType<T>) => void;
+  projectID: number;
+  fileID: number;
+}
+export function downloadJobZipService({
+  callApi,
+  projectID,
+  fileID,
+}: downloadJobZipType): Promise<downloadJobZipServiceType> {
+  return new Promise((resolve, reject) => {
+    callApi({
+      apiURL: downloadZipAPI
         .replace("{projectID}", String(projectID))
         .replace("{fileID}", String(fileID)),
       method: "DELETE",

@@ -22,4 +22,13 @@ export type projectType = {
   createddate: string;
   projectfiles: number;
   projectjobs: number;
+  fileId?: [];
+};
+
+export type projectJobType = {
+  jobid: string;
+  jobname?: string;
+  status: "Pending" | "Processing" | "Completed" | "Failed";
+  zipfile?: string;
+  zipname?: string;
 };
