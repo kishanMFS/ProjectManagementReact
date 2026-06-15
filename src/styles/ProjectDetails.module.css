@@ -30,7 +30,7 @@
 .projectJobsArea {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-around;
 }
 
 .jobsContainer {
@@ -38,19 +38,23 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-  max-width: 420px;
+  max-width: 600px;
 }
 .jobsHeader,
 .filesHeader {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 
 .jobDetails,
 .filesList {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-between;
+}
+
+.filesList {
+  justify-content: flex-start;
 }
 
 @media (max-width: 350px) {

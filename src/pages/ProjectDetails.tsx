@@ -83,26 +83,28 @@ function ProjectDetails() {
       });
 
       if (!response.success) return;
-
       setJobs(response.jobs);
-
       const processingJobs = response.jobs.some(
-        (job) => job.status === "Pending" || job.status === "Processing",
+        (job) => job.status === "PENDING" || job.status === "PROCESSING",
       );
 
       if (!processingJobs && pollingRef.current) {
         clearInterval(pollingRef.current);
         pollingRef.current = null;
       }
-    }, 5000);
+    }, 700);
   }
 
-  async function handleDownloadJob(jobId: string) {
-    const blob = await downloadJobZipService(jobId);
+  async function handleDownloadJob(zipname: string) {
+    const blob = await downloadJobZipService({
+      callApi,
+      projectId,
+      zipname,
+    });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${jobId}.zip`;
+    a.download = `${zipname}`;
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -237,7 +239,7 @@ function ProjectDetails() {
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
-                        handleDownloadJob(job.jobid);
+                        handleDownloadJob(job.zipname);
                       }}
                     >
                       {job.zipname}
@@ -248,7 +250,10 @@ function ProjectDetails() {
                 </div>
 
                 <div className={ProjectDetailsModuleCSS.jobRow}>
-                  {job.status}
+                  {job.status}{" "}
+                  {job.progress < 100 &&
+                    job.progress > 0 &&
+                    ` (${job.progress}%)`}
                 </div>
               </div>
             ))}

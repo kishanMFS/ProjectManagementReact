@@ -31,4 +31,5 @@ export type projectJobType = {
   status: "Pending" | "Processing" | "Completed" | "Failed";
   zipfile?: string;
   zipname?: string;
+  progress?: number | undefined;
 };

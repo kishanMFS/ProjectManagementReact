@@ -6,6 +6,7 @@ interface useXHRType<T> {
   reject: (value: unknown) => void;
   method?: string;
   contentType?: string;
+  responseType?: XMLHttpRequestResponseType;
 }
 
 function useXHR() {
@@ -17,11 +18,13 @@ function useXHR() {
     reject,
     method = "POST",
     contentType = "application/json",
+    responseType = "json",
   }: useXHRType<object>) => {
     const xhr = new XMLHttpRequest();
 
     xhr.open(method, apiURL);
     xhr.withCredentials = true;
+    xhr.responseType = responseType;
 
     if (!(param instanceof FormData)) {
       xhr.setRequestHeader("Content-Type", contentType);
@@ -35,7 +38,7 @@ function useXHR() {
     };
 
     xhr.onload = () => {
-      resolve(JSON.parse(xhr.response));
+      resolve(xhr.response);
     };
 
     xhr.onerror = reject;
