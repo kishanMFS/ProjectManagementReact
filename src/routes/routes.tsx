@@ -13,6 +13,7 @@ import { UserAuthContextProvider } from "../context/authenticationContext";
 import { ProjectContextProvider } from "../context/ProjectContext";
 import { ErrorContextProvider } from "../context/ErrorContext";
 import ErrorBoundaryWrapper from "../components/ErrorBoundaryWrapper";
+// import { lazy } from "react";
 
 export interface routesType {
   path: string;

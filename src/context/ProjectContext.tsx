@@ -14,6 +14,7 @@ type actionType =
 type ProjectContextType = {
   projects: projectType[];
   dispatchProjectReducer: React.Dispatch<actionType>;
+  loadProjects: "";
 };
 
 const ProjectContext = createContext<ProjectContextType | null>(null);
@@ -35,7 +36,7 @@ export function ProjectContextProvider({
       if (response.success) {
         dispatchProjectReducer({
           type: "SET_PROJECTS",
-          payload: response.projects,
+          payload: response.data,
         });
       }
     } catch (error) {

@@ -37,7 +37,7 @@ function ProjectDetails() {
     });
 
     if (response.success) {
-      setJobs(response.jobs);
+      setJobs(response.data);
     }
   }, [callApi, projectId]);
 
@@ -72,8 +72,8 @@ function ProjectDetails() {
       });
 
       if (!response.success) return;
-      setJobs(response.jobs);
-      const processingJobs = response.jobs.some(
+      setJobs(response.data);
+      const processingJobs = response.data.some(
         (job) => job.status === "PENDING" || job.status === "PROCESSING",
       );
 
@@ -125,16 +125,16 @@ function ProjectDetails() {
       ]);
 
       if (filesResponse.success) {
-        setFiles(filesResponse.files);
+        setFiles(filesResponse.data);
       }
 
       if (jobsResponse.success) {
-        setJobs(jobsResponse.jobs);
+        setJobs(jobsResponse.data);
       }
     }
 
     fetchData();
-  }, [projectId]);
+  }, []);
 
   return (
     <div>
