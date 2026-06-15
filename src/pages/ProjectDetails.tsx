@@ -117,9 +117,16 @@ function ProjectDetails() {
     };
   }, []);
 
-  loadFiles();
-  loadJobs();
-  useEffect(() => {}, [projectId]);
+  useEffect(() => {
+    // loadFiles();
+    // loadJobs();
+
+    async function fetchData() {
+      await Promise.all([loadFiles(), loadJobs()]);
+    }
+
+    fetchData();
+  }, [projectId]);
 
   return (
     <div>
