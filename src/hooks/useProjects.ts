@@ -2,7 +2,8 @@ import type { projectType } from "../types/projects";
 import { useProjectsContext } from "../hooks/useProject";
 
 function useProjects() {
-  const { projects, dispatchProjectReducer } = useProjectsContext();
+  const { projects, dispatchProjectReducer, loadProjects } =
+    useProjectsContext();
 
   const addProject = (project: projectType) => {
     dispatchProjectReducer({ type: "ADD_PROJECT", payload: project });
@@ -17,7 +18,7 @@ function useProjects() {
   };
 
   const getProjectByProjectId = (projectId: string) => {
-    return projects.find((p) => p.project_id === Number(projectId));
+    return projects.find((p) => Number(p.project_id) === Number(projectId));
   };
 
   return {
@@ -26,6 +27,7 @@ function useProjects() {
     updateProject,
     deleteProject,
     getProjectByProjectId,
+    loadProjects,
   };
 }
 

@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useReducer, useRef } from "react";
+import React, { createContext, useEffect, useReducer } from "react";
 
 import useXHR from "../hooks/useXHR";
 import { projectReducer, getProjects } from "../reducers/projectReducers";
@@ -25,39 +25,34 @@ export function ProjectContextProvider({
 }) {
   const [projects, dispatchProjectReducer] = useReducer(projectReducer, []);
   const { callApi } = useXHR();
-  const hasLoaded = useRef(false);
+
   const { isLoggedIn } = useAuth();
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      hasLoaded.current = false;
-      return;
-    }
+  const loadProjects = async () => {
+    try {
+      const response = await getProjects(callApi);
 
-    if (hasLoaded.current) return;
-
-    hasLoaded.current = true;
-
-    const loadProjects = async () => {
-      try {
-        const response = await getProjects(callApi);
-
-        if (response.success) {
-          dispatchProjectReducer({
-            type: "SET_PROJECTS",
-            payload: response.projects,
-          });
-        }
-      } catch (error) {
-        console.error("Failed to load projects", error);
+      if (response.success) {
+        dispatchProjectReducer({
+          type: "SET_PROJECTS",
+          payload: response.projects,
+        });
       }
-    };
+    } catch (error) {
+      console.error("Failed to load projects", error);
+    }
+  };
 
-    loadProjects();
-  }, [isLoggedIn, callApi]);
+  useEffect(() => {
+    if (isLoggedIn) {
+      loadProjects();
+    }
+  }, [isLoggedIn]);
 
   return (
-    <ProjectContext.Provider value={{ projects, dispatchProjectReducer }}>
+    <ProjectContext.Provider
+      value={{ projects, dispatchProjectReducer, loadProjects }}
+    >
       {children}
     </ProjectContext.Provider>
   );
