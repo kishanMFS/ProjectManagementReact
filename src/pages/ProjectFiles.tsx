@@ -121,7 +121,7 @@ function ProjectFiles() {
         showErrorMessage("Failed to load files");
       }
     })();
-  }, [projectId, callApi, showErrorMessage]);
+  }, [projectId]);
 
   return (
     <div>
