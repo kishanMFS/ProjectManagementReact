@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef, useState, useCallback } from "react";
 import useProjects from "../hooks/useProjects";
+import VirtualizedJobsList from "../components/VirtualizedJobsList";
 
 import ProjectDetailsModuleCSS from "../styles/ProjectDetails.module.css";
 import GlobalModuleCSS from "../styles/Global.module.css";
@@ -107,7 +108,6 @@ function ProjectDetails() {
       }
     };
   }, []);
-
   useEffect(() => {
     // loadFiles();
     // loadJobs();
@@ -230,7 +230,7 @@ function ProjectDetails() {
               <div>job status</div>
             </div>
 
-            {jobs.map((job) => (
+            {/* {jobs.map((job) => (
               <div
                 key={job.jobid}
                 className={ProjectDetailsModuleCSS.jobDetails}
@@ -262,7 +262,8 @@ function ProjectDetails() {
                     ` (${job.progress}%)`}
                 </div>
               </div>
-            ))}
+            ))} */}
+            <VirtualizedJobsList jobs={jobs} onDownload={handleDownloadJob} />
           </div>
         </>
       )}
