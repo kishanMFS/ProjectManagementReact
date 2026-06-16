@@ -75,7 +75,7 @@ function ProjectDetails() {
       if (!response.success) return;
       setJobs(response.data);
       const processingJobs = response.data.some(
-        (job) => job.status === "PENDING" || job.status === "PROCESSING",
+        (job) => job.status === "STARTED" || job.status === "PROCESSING",
       );
 
       if (!processingJobs && pollingRef.current) {

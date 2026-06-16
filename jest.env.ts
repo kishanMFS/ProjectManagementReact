@@ -1,5 +1,8 @@
 import dotenv from "dotenv";
-dotenv.config({ path: ".env.development" });
+dotenv.config({
+  // path: ".env.development"
+  path: `.env.${process.env.NODE_ENV || "development"}`,
+});
 
 // Define import.meta.env so components can access it
 globalThis.import = {
