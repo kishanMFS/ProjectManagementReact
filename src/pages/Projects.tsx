@@ -25,8 +25,13 @@ function Projects() {
     createddate: new Date().toISOString().split("T")[0],
   });
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const { projects, addProject, deleteProject, getProjectByProjectId } =
-    useProjects();
+  const {
+    projects,
+    addProject,
+    deleteProject,
+    getProjectByProjectId,
+    loadProjects,
+  } = useProjects();
   const { showErrorMessage } = useErrorContext();
   const { callApi } = useXHR();
 
@@ -51,6 +56,10 @@ function Projects() {
         .querySelector<HTMLInputElement>("input[name='projectname']")
         ?.focus();
   }, [modalOpen]);
+
+  useEffect(() => {
+    loadProjects();
+  }, []);
 
   const handleDeleteProject = async (projectId: string) => {
     const deletedProject: projectType = getProjectByProjectId(projectId)!;

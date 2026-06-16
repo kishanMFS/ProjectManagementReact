@@ -133,6 +133,7 @@ export type projectFileType = {
   size: number;
   uploadedDate: string;
   files: fileType[];
+  data: [];
 };
 
 export interface getProjectFilesType {
@@ -186,7 +187,7 @@ export function deleteProjectFileService({
 export type getProjectJobsServiceType = {
   success: boolean;
   message: string;
-  jobs: [];
+  data: [];
 };
 export interface getProjectJobsType {
   callApi: <T>(args: callApiType<T>) => void;

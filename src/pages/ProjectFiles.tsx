@@ -35,7 +35,7 @@ function ProjectFiles() {
         project_id: Number(projectId),
       });
 
-      setCurrentProjectFiles(response.files);
+      setCurrentProjectFiles(response.data);
     } catch {
       showErrorMessage("Failed to load files");
     }
@@ -116,12 +116,12 @@ function ProjectFiles() {
           project_id: Number(projectId),
         });
 
-        setCurrentProjectFiles(response.files);
+        setCurrentProjectFiles(response.data);
       } catch {
         showErrorMessage("Failed to load files");
       }
     })();
-  }, [projectId]);
+  }, [projectId, callApi, showErrorMessage]);
 
   return (
     <div>

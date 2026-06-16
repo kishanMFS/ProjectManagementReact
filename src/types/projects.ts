@@ -28,7 +28,7 @@ export type projectType = {
 export type projectJobType = {
   jobid: string;
   jobname?: string;
-  status: "PENDING" | "PROCESSING" | "COMPLETED" | "FAILED";
+  status: "STARTED" | "PROCESSING" | "COMPLETED" | "FAILED";
   zipfile?: string;
   zipname?: string;
   progress?: number;
