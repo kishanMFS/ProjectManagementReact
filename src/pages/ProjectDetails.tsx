@@ -83,6 +83,14 @@ function ProjectDetails() {
         pollingRef.current = null;
       }
     }, 700);
+
+    // Force stop after 5 seconds
+    setTimeout(() => {
+      if (pollingRef.current) {
+        clearInterval(pollingRef.current);
+        pollingRef.current = null;
+      }
+    }, 6000);
   }
 
   async function handleDownloadJob(zipname: string) {
