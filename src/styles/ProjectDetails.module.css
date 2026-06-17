@@ -44,6 +44,9 @@
 .filesHeader {
   display: flex;
   justify-content: space-between;
+  background: #88f6d1f7;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .jobDetails,

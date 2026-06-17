@@ -201,7 +201,7 @@ function ProjectDetails() {
 
             <div className={ProjectDetailsModuleCSS.projectDetailsContainer}>
               <>{files.length ? "" : "No files available"}</>
-              {files.map((file, index) => (
+              {files.map((file) => (
                 <div
                   key={file.projectfileid}
                   className={ProjectDetailsModuleCSS.filesList}
@@ -215,10 +215,14 @@ function ProjectDetails() {
                       onChange={() =>
                         handleFileSelection(String(file.projectfileid))
                       }
+                      tabIndex={0}
+                      role="checkbox"
+                      id="fileUploaded"
                     />
                   </div>
                   <div>
-                    {index + 1}. {file.name}
+                    {/* {index + 1}.  */}
+                    {file.name}
                   </div>
                 </div>
               ))}
