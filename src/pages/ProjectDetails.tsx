@@ -192,6 +192,7 @@ function ProjectDetails() {
             </div>
 
             <div className={ProjectDetailsModuleCSS.projectDetailsContainer}>
+              <>{files.length ? "" : "No files available"}</>
               {files.map((file, index) => (
                 <div
                   key={file.projectfileid}
@@ -225,10 +226,12 @@ function ProjectDetails() {
 
           <div className={ProjectDetailsModuleCSS.jobsContainer}>
             <div className={ProjectDetailsModuleCSS.jobsHeader}>
-              <div>job ID</div>
-              <div>job name</div>
-              <div>job status</div>
+              <div>Job ID</div>
+              <div>Job Name</div>
+              <div>Job Status</div>
             </div>
+
+            <div>{jobs.length ? "" : "No jobs available"}</div>
 
             {/* {jobs.map((job) => (
               <div
