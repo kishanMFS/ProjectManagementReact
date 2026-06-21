@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy } from "react";
 import { useNavigate } from "react-router-dom";
-import Modal from "../components/Modal/Modal";
-import InputText from "../components/InputText";
+const Modal = lazy(() => import("../components/Modal/Modal"));
+const InputText = lazy(() => import("../components/InputText"));
 
 import GlobalModuleCSS from "../styles/Global.module.css";
 import ProjectsModuleCSS from "../styles/Projects.module.css";
