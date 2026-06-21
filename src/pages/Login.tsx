@@ -96,7 +96,9 @@ function Login() {
       setIsLoading(false);
       setProgress(0);
     } catch (error: unknown) {
-      console.error("Login failed:", error);
+      if (error instanceof Error) {
+        console.error("Login failed:", error);
+      }
       setIsLoading(false);
       setProgress(0);
       setloginApiError(
