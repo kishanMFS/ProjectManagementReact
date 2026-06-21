@@ -39,8 +39,10 @@ export function ProjectContextProvider({
           payload: response.data,
         });
       }
-    } catch (error) {
-      console.error("Failed to load projects", error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Failed to load projects", error);
+      }
     }
   };
 
