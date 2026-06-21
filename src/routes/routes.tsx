@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import { Navigate, createBrowserRouter, Outlet } from "react-router-dom";
+import type { RouteObject } from "react-router-dom";
 
 import Login from "../pages/Login";
 import Projects from "../pages/Projects";
@@ -6,20 +8,21 @@ import ProjectDetails from "../pages/ProjectDetails";
 import ProjectFiles from "../pages/ProjectFiles";
 import MissingComponent from "../pages/MissingComponent";
 import RenderError from "../pages/Error";
-
+import Loader from "../components/Loader";
 import Layout from "../components/Layout";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { UserAuthContextProvider } from "../context/authenticationContext";
 import { ProjectContextProvider } from "../context/ProjectContext";
 import { ErrorContextProvider } from "../context/ErrorContext";
 import ErrorBoundaryWrapper from "../components/ErrorBoundaryWrapper";
-// import { lazy } from "react";
 
-export interface routesType {
+interface routesType {
   path: string;
   element: React.ReactNode;
   children?: routesType[];
 }
+
+// const Loader = () => <div>Loading...</div>;
 
 const routes: routesType[] = [
   {
@@ -40,7 +43,7 @@ const routes: routesType[] = [
     children: [
       {
         path: "",
-        element: <Navigate to="/project" replace />,
+        element: <Navigate to="/projects" replace />,
       },
       {
         path: "projects",
@@ -66,11 +69,15 @@ const routes: routesType[] = [
   },
 ];
 
-const mapRoutes = (routes: routesType[]): routesType[] => {
+const wrapWithSuspense = (element: React.ReactNode) => (
+  <Suspense fallback={<Loader />}>{element}</Suspense>
+);
+
+const mapRoutes = (routes: routesType[]): RouteObject[] => {
   return routes.map((route) => ({
     path: route.path,
-    element: route.element,
-    errorElement: <RenderError />,
+    element: wrapWithSuspense(route.element),
+    errorElement: wrapWithSuspense(<RenderError />),
     children: route.children ? mapRoutes(route.children) : undefined,
   }));
 };
@@ -83,13 +90,19 @@ const router = createBrowserRouter([
         <ErrorContextProvider>
           <UserAuthContextProvider>
             <ProjectContextProvider>
-              <Outlet />
+              <Suspense fallback={<Loader />}>
+                <Outlet />
+              </Suspense>
             </ProjectContextProvider>
           </UserAuthContextProvider>
         </ErrorContextProvider>
       </ErrorBoundaryWrapper>
     ),
-    errorElement: <RenderError />,
+    errorElement: (
+      <Suspense fallback={<Loader />}>
+        <RenderError />
+      </Suspense>
+    ),
     children: mapRoutes(routes),
   },
 ]);

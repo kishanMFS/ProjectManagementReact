@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import InputText from "../components/InputText";
-import {loginUserService} from "../services/authAPI";
-import Spinner from "../components/Spinner";
+import { useEffect, useState, lazy } from "react";
+const InputText = lazy(() => import("../components/InputText"));
+import { loginUserService } from "../services/authAPI";
+const Spinner = lazy(() => import("../components/Spinner"));
 
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -78,7 +78,7 @@ function Login() {
         email: formField.email,
         password: formField.password,
       };
-    
+
       const response = await loginUserService({
         callApi,
         credentials,
@@ -87,8 +87,7 @@ function Login() {
       const jwttoken = response.access_token;
       if (!jwttoken) {
         setloginApiError(response.message);
-      }
-      else{
+      } else {
         if (jwttoken.length) {
           loginUser();
         }
